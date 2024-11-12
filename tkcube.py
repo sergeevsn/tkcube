@@ -47,12 +47,16 @@ class MainWindow(tk.Tk):
         self.title(PROJECT_TITLE)
         self.geometry(START_GEOMETRY)
         self.start_bytes = HeaderStartBytes(*DEFAULT_HEADER_BYTES)
+         # Переменная для хранения названия файла
+        self.current_file_name = "Choose a file to show..."
+
         self.create_menu()
         self.create_central_widget()
         self.create_plot_canvas()
         self.create_index_slider()
         self.initialize_data_variables()
 
+       
     def create_menu(self):
         menubar = tk.Menu(self)
         self.config(menu=menubar)
@@ -76,6 +80,10 @@ class MainWindow(tk.Tk):
     def create_central_widget(self):
         self.frame = tk.Frame(self)
         self.frame.pack(fill=tk.BOTH, expand=True)
+
+        # Добавляем Label для отображения названия файла
+        self.file_label = tk.Label(self.frame, text=self.current_file_name, font=("Arial", 12), bg="lightgray", fg="black")
+        self.file_label.pack(side=tk.TOP, pady=3)
 
     def create_plot_canvas(self):
         self.figure = plt.Figure()
@@ -102,6 +110,8 @@ class MainWindow(tk.Tk):
     def open_file(self):
         filename = filedialog.askopenfilename(filetypes=[("SEG-Y Files", "*.segy *.sgy"), ("All Files", "*.*")])
         if filename:
+            self.current_file_name = filename  # Обновляем название файла
+            self.file_label.config(text=self.current_file_name)  # Обновляем текст Label
             self.show_progress_dialog("Scanning SEG-Y headers...", self.scan_segy, filename)
 
     def show_progress_dialog(self, title, operation, *args):
