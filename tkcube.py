@@ -83,7 +83,7 @@ class MainWindow(tk.Tk):
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
     def create_index_slider(self):
-        self.index_slider = tk.Scale(self.frame, from_=0, to=100, orient=tk.HORIZONTAL, label="Index")
+        self.index_slider = tk.Scale(self.frame, from_=0, to=100, orient=tk.HORIZONTAL, label="TIME")
         self.index_slider.pack(fill=tk.X)
         self.index_slider.bind("<ButtonRelease-1>", self.update_plot_with_slider)
 
@@ -184,7 +184,7 @@ class MainWindow(tk.Tk):
         ax = self.figure.add_subplot(111)
 
         index = self.index_slider.get() if update else self.unique_inlines[len(self.unique_inlines)//2]
-        self.configure_slider(self.unique_inlines, index)
+        self.configure_slider(self.unique_inlines, index, "INLINE")
 
         inl_idx = np.where(self.unique_inlines == index)
         ax.imshow(self.cube[inl_idx].T, aspect='auto', cmap=DEFAULT_CMAP, extent=[min(self.unique_crosslines), max(self.unique_crosslines), max(self.samples)*self.dt, 0])
@@ -202,7 +202,7 @@ class MainWindow(tk.Tk):
         ax = self.figure.add_subplot(111)
 
         index = self.index_slider.get() if update else self.unique_crosslines[len(self.unique_crosslines)//2]
-        self.configure_slider(self.unique_crosslines, index)
+        self.configure_slider(self.unique_crosslines, index, "CROSSLINE")
 
         xln_idx = np.where(self.unique_crosslines == index)[0]
         ax.imshow(self.cube[:, xln_idx].squeeze().T, aspect='auto', cmap=DEFAULT_CMAP, extent=[min(self.unique_inlines), max(self.unique_inlines), max(self.samples)*self.dt, 0])
@@ -220,7 +220,7 @@ class MainWindow(tk.Tk):
         ax = self.figure.add_subplot(111)
 
         index = self.index_slider.get() if update else self.samples[len(self.samples)//2]*self.dt
-        self.configure_slider(self.samples*self.dt, index)
+        self.configure_slider(self.samples*self.dt, index, "TIME")
 
         smp_idx = np.where(self.samples == index//self.dt)[0]
         ax.imshow(self.cube[:, :, smp_idx], aspect='auto', cmap=DEFAULT_CMAP, extent=[min(self.unique_crosslines), max(self.unique_crosslines), max(self.unique_inlines), min(self.unique_inlines)])
@@ -230,9 +230,9 @@ class MainWindow(tk.Tk):
         ax.invert_yaxis()
         self.canvas.draw()
 
-    def configure_slider(self, values, index):
-        self.index_slider.config(from_=min(values), to=max(values), resolution=1)
-        self.index_slider.set(index)
+    def configure_slider(self, values, index, label):
+        self.index_slider.config(from_=min(values), to=max(values), resolution=1, label=label)
+        self.index_slider.set(index)        
 
     def update_plot_with_slider(self, event):
         if self.current_mode == 'inline_section':
