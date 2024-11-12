@@ -68,7 +68,7 @@ class MainWindow(tk.Tk):
 
         mapMenu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label='Plot', menu=mapMenu)
-        mapMenu.add_command(label='X/Y/Z Map', command=self.show_xy_map)
+        mapMenu.add_command(label='X/Y Map', command=self.show_xy_map)
         mapMenu.add_command(label='Inline Section', command=self.show_inline_section)
         mapMenu.add_command(label='Crossline Section', command=self.show_crossline_section)
         mapMenu.add_command(label='Time Slice', command=self.show_time_slice)
