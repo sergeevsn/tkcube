@@ -1,7 +1,7 @@
 ### TKCUBE - TKinter Python app for visualizing seismic cubes. 
 Uses SegyIO and Matplotlib as well. 
 
-### Get and laucn
+### Get and launch
 
 ```bash
 git clone https://github.com/sergeevsn/tkcube.git
